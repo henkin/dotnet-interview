@@ -29,23 +29,24 @@ namespace Dotnet.Interview.WebApi.WeatherForecast
         }
 
         [HttpGet]
-        public IEnumerable<CreateViewModel> Get()
+        public IEnumerable<RetrieveViewModel> Get()
         {
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index =>
+            var weatherEntries = Enumerable.Range(1, 5).Select(index =>
                 {
                     var x = rng.Next(Summaries.Length);
 
                     var temperatureF = 10 * x + 20 + rng.Next(10);
-                    return new CreateViewModel
+                    return new RetrieveViewModel
                     {
                         Date = DateTime.Now.AddDays(index),
                         TemperatureF = temperatureF, // Freezing == 20, Warm = 70
                         City = Cities[rng.Next(Cities.Length)],
                         Summary = Summaries[x]
                     };
-                })
-            .ToArray();
+                }).ToArray();
+
+            return weatherEntries;
         }
 
         [HttpPost]

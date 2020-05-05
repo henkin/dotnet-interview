@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace Dotnet.Interview.WebApi.Tests
         {
             // Arrange
             var client = _factory.CreateClient();
-            var expected = new CreateViewModel()
+            var expected = new CreateViewModel
             {
                 City = "Kirkland",
                 TemperatureF = 77
@@ -50,7 +51,8 @@ namespace Dotnet.Interview.WebApi.Tests
             
             // Act
             var response = await client.PostAsync(RequestUri,
-                new StringContent(JsonSerializer.Serialize(expected))
+                new StringContent(JsonSerializer.Serialize(expected, 
+                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase}))
             );
 
             // Assert
@@ -77,9 +79,12 @@ namespace Dotnet.Interview.WebApi.Tests
 
             var content = await response.Content.ReadAsStringAsync();
             var viewModels = JsonSerializer
-                .Deserialize<IEnumerable<RetrieveViewModel>>(content);
-            
-            viewModels.Should().HaveCountLessThan(5);
+                .Deserialize<IEnumerable<RetrieveViewModel>>(content, 
+                    new JsonSerializerOptions() {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+
+            viewModels.Should().HaveCount(5);
+            viewModels.Select(x => x.TemperatureF).Should().NotContain(temp => temp > 130 || temp < -40, 
+                "normal temperatures on earth");
         }
     }
 }
