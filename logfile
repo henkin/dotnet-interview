@@ -1,0 +1,27 @@
+2020-05-06 09:41:52.087 PDT [21249] LOG:  starting PostgreSQL 12.2 on x86_64-apple-darwin19.4.0, compiled by Apple clang version 11.0.3 (clang-1103.0.32.59), 64-bit
+2020-05-06 09:41:52.089 PDT [21249] LOG:  listening on IPv6 address "::1", port 5432
+2020-05-06 09:41:52.089 PDT [21249] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-05-06 09:41:52.090 PDT [21249] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-05-06 09:41:52.101 PDT [21250] LOG:  database system was shut down at 2020-05-06 09:41:27 PDT
+2020-05-06 09:41:52.104 PDT [21249] LOG:  database system is ready to accept connections
+2020-05-06 09:42:16.902 PDT [21261] FATAL:  role "postgres" does not exist
+2020-05-06 09:43:49.052 PDT [21275] FATAL:  role "postgres" does not exist
+2020-05-06 09:44:19.893 PDT [21425] FATAL:  lock file "postmaster.pid" already exists
+2020-05-06 09:44:19.893 PDT [21425] HINT:  Is another postmaster (PID 21249) running in data directory "/usr/local/var/postgres"?
+2020-05-06 09:48:27.485 PDT [21249] LOG:  received smart shutdown request
+2020-05-06 09:48:27.486 PDT [21249] LOG:  background worker "logical replication launcher" (PID 21256) exited with exit code 1
+2020-05-06 09:48:27.487 PDT [21251] LOG:  shutting down
+2020-05-06 09:48:27.495 PDT [21249] LOG:  database system is shut down
+2020-05-06 09:48:55.155 PDT [21492] LOG:  starting PostgreSQL 12.2 on x86_64-apple-darwin19.4.0, compiled by Apple clang version 11.0.3 (clang-1103.0.32.59), 64-bit
+2020-05-06 09:48:55.158 PDT [21492] LOG:  listening on IPv6 address "::1", port 5432
+2020-05-06 09:48:55.158 PDT [21492] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2020-05-06 09:48:55.159 PDT [21492] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2020-05-06 09:48:55.171 PDT [21493] LOG:  database system was shut down at 2020-05-06 09:48:27 PDT
+2020-05-06 09:48:55.175 PDT [21492] LOG:  database system is ready to accept connections
+2020-05-06 09:49:23.156 PDT [21506] FATAL:  role "postgres" does not exist
+2020-05-06 09:49:35.434 PDT [21508] FATAL:  role "postgres" does not exist
+2020-05-06 09:53:11.621 PDT [21580] FATAL:  terminating connection due to administrator command
+2020-05-06 09:53:11.621 PDT [21492] LOG:  received smart shutdown request
+2020-05-06 09:53:11.623 PDT [21492] LOG:  background worker "logical replication launcher" (PID 21499) exited with exit code 1
+2020-05-06 09:53:11.631 PDT [21494] LOG:  shutting down
+2020-05-06 09:53:11.639 PDT [21492] LOG:  database system is shut down

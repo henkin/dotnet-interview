@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Dotnet.Interview.WebApi.WeatherForecast;
@@ -39,33 +41,6 @@ namespace Dotnet.Interview.WebApi.Tests
         }
 
         [Fact]
-        public async Task Post_ReportWeather_Return201_Body_And_Location()
-        {
-            // Arrange
-            var client = _factory.CreateClient();
-            var expected = new CreateViewModel
-            {
-                City = "Kirkland",
-                TemperatureF = 77
-            };
-            
-            // Act
-            var response = await client.PostAsync(RequestUri,
-                new StringContent(JsonSerializer.Serialize(expected, 
-                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase}))
-            );
-
-            // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-            
-            // assert body of response deserializes into WeatherForecast
-
-            //   and forecast has Id set;
-
-            // assert response header Location points to created weather
-        }
-
-        [Fact]
         public async Task Get_Return200_And_WeatherForecasts()
         {
             // Arrange
@@ -78,13 +53,51 @@ namespace Dotnet.Interview.WebApi.Tests
             response.EnsureSuccessStatusCode(); // Status Code 200-299
 
             var content = await response.Content.ReadAsStringAsync();
-            var viewModels = JsonSerializer
-                .Deserialize<IEnumerable<RetrieveViewModel>>(content, 
-                    new JsonSerializerOptions() {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+            var weatherEntries = DeserializeResponseString<IEnumerable<WeatherEntry>>(content);
 
-            viewModels.Should().HaveCount(5);
-            viewModels.Select(x => x.TemperatureF).Should().NotContain(temp => temp > 130 || temp < -40, 
+            weatherEntries.Should().HaveCount(5);
+            weatherEntries.Select(x => x.TemperatureF).Should().NotContain(temp => temp > 130 || temp < -40,
                 "normal temperatures on earth");
         }
+
+        [Fact]
+        public async Task Post_ReportWeather_Return201AndWeatherEntryAndLocationHeader()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var expected = new WeatherEntryCreateRequest()
+            {
+                City = "Kirkland",
+                Date = DateTime.Now,
+                TemperatureF = 77
+            };
+
+            // Act
+            var response = await client.PostAsync(RequestUri, GetJsonSerializedStringContent(expected));
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+
+            // assert body of response deserializes into WeatherForecast
+
+            //   and forecast has Id set;
+
+            // assert response header Location points to created weather
+            var actualId = 12345; // grab value from deserialized object
+            response.Headers.Location.Should().Be($"/WeatherForecast/{actualId}"); 
+        }
+
+        private static StringContent GetJsonSerializedStringContent(object o)
+        {
+            var content = JsonSerializer.Serialize(o,
+                new JsonSerializerOptions() {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+            return stringContent;
+        }
+        
+        private static TResponse DeserializeResponseString<TResponse>(string content) =>
+            JsonSerializer
+                .Deserialize<TResponse>(content, 
+                    new JsonSerializerOptions() {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
     }
 }

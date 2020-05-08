@@ -11,50 +11,36 @@ namespace Dotnet.Interview.WebApi.WeatherForecast
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = 
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-        
-        private static readonly string[] Cities = 
-        {
-            "Seattle", "Bellevue", "New York"
-        };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly WeatherService _weatherService;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
+            _weatherService = new WeatherService();
         }
 
         [HttpGet]
-        public IEnumerable<RetrieveViewModel> Get()
+        public IEnumerable<WeatherEntry> Get()
         {
-            var rng = new Random();
-            var weatherEntries = Enumerable.Range(1, 5).Select(index =>
-                {
-                    var x = rng.Next(Summaries.Length);
-
-                    var temperatureF = 10 * x + 20 + rng.Next(10);
-                    return new RetrieveViewModel
-                    {
-                        Date = DateTime.Now.AddDays(index),
-                        TemperatureF = temperatureF, // Freezing == 20, Warm = 70
-                        City = Cities[rng.Next(Cities.Length)],
-                        Summary = Summaries[x]
-                    };
-                }).ToArray();
-
-            return weatherEntries;
+            var entries = _weatherService.GetWeatherEntries();
+            return entries;
         }
 
         [HttpPost]
-        public RetrieveViewModel Post(CreateViewModel createViewModel)
+        public WeatherEntry Post([FromBody] WeatherEntryCreateRequest createViewModel)
         {
-            var retrieveViewModel = new RetrieveViewModel();
+            var retrieveViewModel = new WeatherEntry();
             
             return retrieveViewModel;
+            
+            // try to add entry
+            
+            // return error httpCode if fails
+            
+            // return 201 and the created WeatherEntry if success 
         }
     }
+    
 }

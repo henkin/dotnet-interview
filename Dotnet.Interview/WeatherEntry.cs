@@ -1,8 +1,8 @@
 using System;
 
-namespace Dotnet.Interview.WebApi.WeatherForecast
+namespace Dotnet.Interview
 {
-    public class RetrieveViewModel
+    public class WeatherEntry
     {
         public DateTime Date { get; set; }
 
